@@ -1,6 +1,7 @@
 const Company = require("../models/company.model");
 const { ErrorHandler } = require("../lib/errorhandler.lib");
 const userModel = require("../models/user.model");
+const { adminonly } = require("../utils/namespace.util").namespace;
 
 exports.create = async (payload) => {
   try {
@@ -75,19 +76,36 @@ exports.deleteEmployer = async (payload) => {
     await ErrorHandler(error);
   }
 };
-exports.getEmployerCompany = async (payload) => {
+exports.getEmployerCompanies = async (payload) => {
   try {
     const user = await userModel.findById(payload.body.employerId);
-    if(user){
+    if (user) {
       const companys = await Promise.all(
         user.companys.map((companyId) => {
           return Company.findById(companyId);
         })
       );
-      return companys
-    }else{
-      throw new Error("user can`t be find")
+      return companys;
+    } else {
+      throw new Error("user can`t be find");
     }
+  } catch (error) {
+    await ErrorHandler(error);
+  }
+};
+exports.updateCompany = async (payload) => {
+  try {
+    const creator = await userModel.findById(payload.creatorId);
+    if (!creator || creator?.postion !== "admin") {
+      throw new Error(adminonly);
+    }
+    const user = await userModel.findByIdAndUpdate(payload.employerId, {
+      $set: payload,
+    });
+    const company = await Company.findByIdAndUpdate(payload.companyId, {
+      $set: payload,
+    });
+    return company;
   } catch (error) {
     await ErrorHandler(error);
   }

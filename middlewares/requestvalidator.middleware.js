@@ -15,7 +15,8 @@ exports.Schemas = {
     auth:{
         signin:JOI.object({
             username:JOI.string().required(),
-            password:JOI.string().required()
+            password:JOI.string().required(),
+            companyId:JOI.string().required()
         })
     },
     user: {
@@ -23,6 +24,14 @@ exports.Schemas = {
             username: JOI.string().required(),
             password: JOI.string().required(),
         }),
+        delete:JOI.object({
+            creatorId:JOI.string().required(),
+            employerId:JOI.string().required()
+        }),
+        update:JOI.object({
+            creatorId:JOI.string().required(),
+            employerId:JOI.string().required()
+        })
     },
     company:{
         create:JOI.object({
@@ -46,8 +55,13 @@ exports.Schemas = {
             creatorId:JOI.string().required(),
             employerId:JOI.string().required()
         }),
-        getEmployerCompany:JOI.object({
+        getEmployerCompanies:JOI.object({
             employerId:JOI.string().required()
         })
+    },
+    images:{
+        upload:{
+            creatorId:JOI.string().required()
+        }
     }
 }

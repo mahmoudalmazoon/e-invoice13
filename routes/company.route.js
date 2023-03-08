@@ -10,7 +10,7 @@ const {
 const router = express.Router();
 router.post(
   "/create",
-  // extractJwtFromHeader,
+  extractJwtFromHeader,
   RequestValidator(Schemas.company.create),
   companyController.create
 );
@@ -22,7 +22,7 @@ router.delete(
 );
 router.put(
   "/addEmployer",
-  // extractJwtFromHeader,
+  extractJwtFromHeader,
   RequestValidator(Schemas.company.addEmployer),
   companyController.addEmployer
 );
@@ -34,7 +34,12 @@ router.put(
 );
 router.post(
   "/getEmployerCompany",
-  RequestValidator(Schemas.company.getEmployerCompany),
+  RequestValidator(Schemas.company.getEmployerCompanies),
+  companyController.getEmployerCompany
+);
+router.put(
+  "/updatecompany",
+  RequestValidator(Schemas.company.getEmployerCompanies),
   companyController.getEmployerCompany
 );
 module.exports = router;

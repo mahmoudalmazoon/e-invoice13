@@ -2,9 +2,11 @@ const express = require("express");
 const app = express();
 const authRoutes = require("./routes/auth.route");
 const userRoutes = require("./routes/user.route");
-const companyRoutes = require("./routes/company.route")
+const companyRoutes = require("./routes/company.route");
+const imagesRoutes = require("./routes/image.route");
 const { config } = require("./config/default.config");
-const { NOT_FOUND }  = require('./utils/namespace.util');
+const { NOT_FOUND } = require("./utils/namespace.util");
+const path = require("path");
 const bodyParser = require("body-parser");
 
 // HANLDE CORS
@@ -24,19 +26,20 @@ app.use((req, res, next) => {
   next();
 });
 // EXPRESS FEATURES AND SETTINGS
-app.use(bodyParser.urlencoded({ extended: true }))
-app.use(bodyParser.json({extended:true}))
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({ extended: true }));
+app.use("/images", express.static(path.join(__dirname, "images")));
 // ROUTES
 app.use("/v1/auth", authRoutes);
 app.use("/v1/users", userRoutes);
 app.use("/v1/companys", companyRoutes);
-
+app.use("/v1/images", imagesRoutes);
 // HANDLE 404
 app.use((req, res, next) => {
-    const error = new Error(NOT_FOUND)
-    error.status = 404
-    next(error)
-})
+  const error = new Error(NOT_FOUND);
+  error.status = 404;
+  next(error);
+});
 // HANDLE GLOBAL ERROR
 
 app.use((error, req, res, next) => {
@@ -44,6 +47,6 @@ app.use((error, req, res, next) => {
     error: {
       message: error.message,
     },
-  }); 
+  });
 });
-module.exports = app
+module.exports = app;

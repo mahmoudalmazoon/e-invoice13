@@ -61,9 +61,8 @@ exports.deleteEmployer = async (req, res, next) => {
     });
 };
 exports.getEmployerCompany = async (req, res, next) => {
-  console.log(req.body)
   await companyService
-    .getEmployerCompany(req)
+    .getEmployerCompanies(req)
     .then(async (data) => {
       if (data) {
         return res.status(200).json({ companies: data });
@@ -77,3 +76,12 @@ exports.getEmployerCompany = async (req, res, next) => {
       next(error);
     });
 };
+exports.updateCompany = async (req,res,next)=>{
+  await companyService.updateCompany(req.body).then(data=>{
+    if(data){
+      return res.status(200).json({company:data})
+    }else{
+      res.status(404).json({message:"update failed"})
+    }
+  })
+}
